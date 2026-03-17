@@ -114,21 +114,11 @@ sbatch scripts/01_getData/02_sra.sh
 
 ---
 
-## Expected Results
-
-**Purkinje Cell Subtypes:** 11 distinct clusters (based on published analysis)  
-**Key Markers:** *Pcp2*, *Calb1*, *Grid2*, developmental TFs  
-**Communication Changes:** Altered signaling between E16.5 and E18.5  
-**SMARCE1 Isoforms:** Exon 4 inclusion + 3'UTR length variation
-
----
-
 ## Author
 
-**Jini Samuel**  
-Miura Lab, University of Connecticut  
-Genomic Data Analysis Course - Spring 2026
-
+**Glady Hazitha Samuel**  
+University of Connecticut
+glady.samuel@uconn.edu
 ---
 
 ## References
