@@ -5,3 +5,39 @@
 /rawdata
 /genome
 .DS_Store
+# R/RStudio files
+.Rhistory
+.RData
+.Rproj.user
+*.Rproj
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*~
+*.swp
+
+# Large file types
+*.bam
+*.bai
+*.sam
+*.fastq
+*.fastq.gz
+*.fq.gz
+*.sra
+*.tar.gz
+*.zip
+
+# Seurat objects (can be huge)
+*.rds
+*.RDS
+
+# Plots (optional - you might want to commit some)
+# *.png
+# *.pdf
