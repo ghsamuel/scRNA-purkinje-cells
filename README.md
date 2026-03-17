@@ -114,16 +114,15 @@ sbatch scripts/01_getData/02_sra.sh
 
 ---
 
-## Author
+### Author
 
-**Glady Hazitha Samuel**  
+Glady Hazitha Samuel  
 University of Connecticut
-glady.samuel@uconn.edu
 ---
 
 ## References
 
-Khouri-Farah, N., Neva, J., Lala, N. *et al.* Spatially discrete and sexually dimorphic Purkinje cell populations underlie multisensory and motor behavior. *Nat Neurosci* (2025). https://doi.org/10.1038/s41593-025-02042-w
+Khouri-Farah, N., Guo, Q., Perry, T.A., Dussault, R., Li, J.Y.H. (2025). FOXP genes regulate Purkinje cell diversity and cerebellar morphogenesis. *Nature Neuroscience*. https://doi.org/10.1038/s41593-025-02042-w
 
 ---
 
