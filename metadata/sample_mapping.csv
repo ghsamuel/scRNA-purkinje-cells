@@ -1,0 +1,4 @@
+SRR_ID,GSM_ID,Stage,Replicate,Description
+SRR28065512,GSM8098555,E16.5,rep1,E16.5 wild-type cerebellum replicate 1
+SRR28065511,GSM8098556,E16.5,rep2,E16.5 wild-type cerebellum replicate 2
+SRR28065510,GSM8098557,E18.5,single,E18.5 wild-type cerebellum
