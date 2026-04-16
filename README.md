@@ -95,7 +95,7 @@ sbatch scripts/01_getData/02_sra.sh
 - Compare E16.5 vs E18.5 signaling patterns
 - Identify developmental changes in ligand-receptor interactions
 
-### 6. APA Extension (Optional)
+### 6. APA Extension 
 - SMARCE1 isoform quantification across PC subtypes
 - Integration with communication profiles
 
