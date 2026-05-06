@@ -1,132 +1,254 @@
-# Purkinje Cell Diversity in Mouse Cerebellum Development
+# Purkinje Cell Diversity During Cerebellar Development
 
-Single-cell RNA-seq analysis of Purkinje cell heterogeneity during embryonic mouse cerebellar development.
+**Single-cell RNA-seq analysis pipeline for investigating Purkinje cell heterogeneity in embryonic mouse cerebellum**
+
+[![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs41593--025--02042--w-blue)](https://doi.org/10.1038/s41593-025-02042-w)
+[![GEO](https://img.shields.io/badge/GEO-GSE256438-orange)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)](Dockerfile)
 
 ---
 
-## Project Overview
+## Overview
 
-This project analyzes single-cell RNA sequencing data from embryonic mouse cerebellum to investigate Purkinje cell diversity and developmental changes. The dataset (GSE256438) includes ~35,000 cells across two developmental timepoints, enabling identification of Purkinje cell subtypes and their molecular signatures.
+This repository contains a complete, reproducible analysis pipeline for characterizing Purkinje cell diversity during mouse cerebellar development using single-cell RNA sequencing. The analysis integrates quality control, batch correction, cell type annotation, high-resolution subtyping, cell-cell communication inference, and alternative polyadenylation quantification.
 
 **Dataset:** Khouri-Farah et al., *Nature Neuroscience* (2025)  
-**DOI:** [10.1038/s41593-025-02042-w](https://doi.org/10.1038/s41593-025-02042-w)  
-**GEO Accession:** GSE256438  
-**BioProject:** PRJNA1079673
+**Technology:** 10X Genomics Chromium single-cell 3' RNA-seq  
+**Samples:** 19,723 high-quality cells across E16.5 (2 replicates) and E18.5  
+**Reference Genome:** GRCm39 (mm39)
 
 ---
 
 ## Biological Question
 
-How does Purkinje cell molecular heterogeneity emerge during cerebellar development between E16.5 and E18.5?
+How do Purkinje cells diversify during embryonic cerebellar development, and what cell-cell communication patterns coordinate this process?
 
-**Analysis Goals:**
-1. Identify Purkinje cell subtypes using standard scRNA-seq clustering
-2. Characterize developmental changes in cell-cell communication (CellChat)
-3. **Extension:** Investigate alternative polyadenylation patterns in SMARCE1 across PC subtypes
+**Key Findings:**
+- Identified 15 Purkinje cell subtypes with distinct Foxp1/Foxp2/Foxp4 expression patterns
+- Detected 15% reduction in cell-cell communication from E16.5 to E18.5
+- Quantified 130 genes with significant 3'UTR length changes during development
+- Successfully validated batch correction approach for technical replicates
 
 ---
 
-## Dataset Details
+## Dataset
 
-| Sample | Age | Tech | Cells (est.) | Data Size |
-|--------|-----|------|--------------|-----------|
-| SRR28065512 | E16.5 rep1 | 10X Chromium | ~12K | ~18 GB |
-| SRR28065511 | E16.5 rep2 | 10X Chromium | ~11K | ~17 GB |
-| SRR28065510 | E18.5 | 10X Chromium | ~12K | ~19 GB |
-| **Total** | - | - | **~35K** | **~54 GB** |
+| Sample | Stage | Replicate | Raw Reads | Cells (post-QC) | SRA Accession |
+|--------|-------|-----------|-----------|-----------------|---------------|
+| E16.5 rep1 | E16.5 | 1 | 286.2M | 6,409 | SRR28065512 |
+| E16.5 rep2 | E16.5 | 2 | 415.3M | 6,692 | SRR28065511 |
+| E18.5 | E18.5 | - | 378.4M | 6,622 | SRR28065510 |
+| **Total** | - | - | **1,080M** | **19,723** | - |
 
-**Sequencing:** Illumina NextSeq 500, paired-end  
-**Reference Genome:** mm10  
+**GEO Accession:** [GSE256438](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)  
+**BioProject:** PRJNA1079673  
+**Sequencing Platform:** Illumina NextSeq 500, paired-end  
 **Chemistry:** 10X Genomics v3
 
 ---
 
 ## Repository Structure
+
 ```
-.
-├── data/
-│   └── fastq/              # Raw FASTQ files (not tracked in Git)
-├── metadata/
-│   ├── SraRunTable.csv     # SRA sample metadata
-│   ├── sample_mapping.csv  # SRR → GSM → Stage mapping
-│   └── subset.txt          # SRR accessions for download
+scRNA-purkinje-cells/
 ├── scripts/
-│   ├── 01_getData/
-│   │   └── 02_sra.sh       # FASTQ download script
-│   ├── 02_cellranger/      # Cell Ranger alignment
-│   ├── 03_seurat/          # Seurat analysis scripts
-│   └── 04_cellchat/        # CellChat analysis
-├── results/                # Analysis outputs (not tracked)
-├── logs/                   # SLURM logs
+│   ├── 01_getData/           # SRA download scripts
+│   ├── 02_qc/                # FastQC quality control
+│   ├── 03_counts/            # Cell Ranger alignment
+│   └── 04_R_analysis/        # Seurat analysis pipeline
+│       ├── 01_data_loading_qc.R
+│       ├── 02_integration_harmony.R
+│       ├── 03_cell_type_annotation.R
+│       ├── 04_purkinje_subtype_analysis.R
+│       ├── 05_cellchat_analysis.R
+│       └── 06_scalpel_apa_analysis.R
+├── metadata/
+│   ├── SraRunTable.csv       # Sample metadata
+│   └── sample_mapping.csv    # SRR to stage mapping
+├── Dockerfile                # Reproducible R environment
+├── environment.yml           # Conda environment specification
+├── purkinje_analysis_report.html  # Complete tutorial-style report
 └── README.md
 ```
 
----
-
-## Analysis Workflow
-
-### 1. Data Download
-```bash
-# Download FASTQ files from SRA
-sbatch scripts/01_getData/02_sra.sh
-```
-
-### 2. Quality Control
-```bash
-# FastQC on raw reads
-# Cell Ranger web_summary.html
-```
-
-### 3. Alignment & Quantification
-```bash
-# Cell Ranger count per sample
-# Output: feature-barcode matrices
-```
-
-### 4. Seurat Processing
-- Quality filtering (nFeature, nCount, percent.mt)
-- Sample integration (E16.5 rep1 + rep2)
-- Dimensionality reduction (PCA, UMAP)
-- Clustering and cell type annotation
-- Differential expression analysis
-
-### 5. CellChat Analysis
-- Infer cell-cell communication networks
-- Compare E16.5 vs E18.5 signaling patterns
-- Identify developmental changes in ligand-receptor interactions
-
-### 6. APA Extension 
-- SMARCE1 isoform quantification across PC subtypes
-- Integration with communication profiles
+**Note:** Raw data (`data/`, `results/`) are not tracked in Git. See Data Availability below.
 
 ---
 
-## Key Software
+## Analysis Pipeline
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| Cell Ranger | 8.0+ | Alignment & quantification |
-| R | 4.3+ | Analysis |
-| Seurat | 5.0+ | scRNA-seq analysis |
-| CellChat | 2.0+ | Cell communication inference |
-| FastQC | 0.12+ | Quality control |
-| MultiQC | 1.15+ | QC aggregation |
+### 1. Data Download & QC
+- Download FASTQ files from SRA using `fasterq-dump --include-technical`
+- Quality assessment with FastQC and MultiQC
+- **Output:** Quality metrics, per-base sequence quality plots
+
+### 2. Cell Ranger Alignment
+- Build GRCm39 reference genome
+- Align reads and generate feature-barcode matrices
+- **Output:** `filtered_feature_bc_matrix/` per sample
+
+### 3. Seurat Quality Control (Script 01)
+- Load Cell Ranger outputs into Seurat
+- Filter cells: 200-5,000 genes, >500 UMIs, <10% mitochondrial
+- **Output:** 3 filtered Seurat objects (`.rds`)
+
+### 4. Harmony Integration (Script 02)
+- Merge samples and correct batch effects with Harmony
+- Re-cluster on integrated embeddings
+- **Output:** Integrated Seurat object, UMAP plots
+
+### 5. Cell Type Annotation (Script 03)
+- Find cluster markers with `FindAllMarkers()`
+- Annotate 15 major cell types using canonical markers
+- **Output:** Annotated Seurat object, marker gene tables
+
+### 6. Purkinje Subtyping (Script 04)
+- Extract Purkinje cells, re-cluster at high resolution (res = 1.0)
+- Identify 15 subtypes based on Foxp1/Foxp2/Foxp4 expression
+- **Output:** Purkinje subtype object, marker gene lists
+
+### 7. CellChat Communication (Script 05)
+- Infer cell-cell communication networks for E16.5 and E18.5
+- Compare interaction strength and pathway usage
+- **Output:** CellChat objects, network visualizations
+
+### 8. Alternative Polyadenylation (Script 06)
+- Run SCALPEL Nextflow pipeline on HPC
+- Quantify 3'UTR length changes across development
+- **Output:** Isoform counts, weighted 3'UTR lengths per gene
 
 ---
 
-### Author
+## Quick Start
 
-Glady Hazitha Samuel  
+### Option 1: Docker (Recommended)
+
+**Prerequisites:** Docker installed
+
+```bash
+# Clone repository
+git clone https://github.com/ghsamuel/scRNA-purkinje-cells.git
+cd scRNA-purkinje-cells
+
+# Build Docker image
+docker build -t purkinje-analysis .
+
+# Download processed data (see Data Availability)
+# Place RDS files in ~/data/
+
+# Run analysis (scripts 02-05)
+docker run -v ~/data:/data -v ~/results:/results purkinje-analysis \
+  Rscript /app/scripts/02_integration_harmony.R
+
+docker run -v ~/data:/data -v ~/results:/results purkinje-analysis \
+  Rscript /app/scripts/03_cell_type_annotation.R
+  
+# Continue with scripts 04 and 05...
+```
+
+### Option 2: Conda Environment
+
+```bash
+# Create conda environment
+conda env create -f environment.yml
+conda activate purkinje-scrna
+
+# Run scripts sequentially
+Rscript scripts/04_R_analysis/01_data_loading_qc.R
+Rscript scripts/04_R_analysis/02_integration_harmony.R
+# ... etc
+```
+
+
+
+---
+
+## Software Requirements
+
+### Core Tools
+- **R** 4.4.2
+- **Cell Ranger** v9.0.1
+- **Nextflow** 23.04+ (for SCALPEL)
+- **Docker** or **Singularity/Apptainer** (for containerization)
+
+### R Packages
+- Seurat 5.4.0
+- harmony 2.0.2
+- CellChat 2.0+
+- dplyr 1.2.1
+- ggplot2 4.0.3
+- patchwork 1.3.2
+
+See `environment.yml` for complete list with exact versions.
+
+---
+
+## Data Availability
+
+### Raw Data
+- **FASTQ files:** [SRA PRJNA1079673](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1079673)
+- **Processed counts:** [GEO GSE256438](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)
+
+### Processed RDS Files (for Docker)
+Filtered Seurat objects from Script 01 output are available on Zenodo:  
+🔗 **[DOI: 10.5281/zenodo.XXXXXXX]** *(to be added)*
+
+These allow users to start from Script 02 (integration) without running Cell Ranger.
+
+---
+
+## Results Summary
+
+| Analysis | Key Finding |
+|----------|-------------|
+| **QC** | 19,723 / 24,434 cells retained (80.7%) |
+| **Batch Correction** | Harmony successfully integrated E16.5 replicates |
+| **Cell Types** | 15 major cell types identified |
+| **Purkinje Subtypes** | 15 subtypes (vs. 11 in original paper) |
+| **Communication** | 15% reduction E16.5 → E18.5 |
+| **APA** | 130 genes with significant 3'UTR changes |
+
+**Full results and figures:** See `purkinje_analysis_report.html`
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**1. Missing Technical Reads**  
+**Problem:** `fasterq-dump` discards barcodes/UMIs by default  
+**Solution:** Use `--include-technical` flag
+
+**2. Seurat v5 FindAllMarkers Error**  
+**Problem:** Layers not joined  
+**Solution:** Run `obj <- JoinLayers(obj)` before `FindAllMarkers()`
+
+**3. Docker Build Fails (Seurat version)**  
+**Problem:** Seurat 5.4.0 not on CRAN yet  
+**Solution:** Dockerfile uses latest stable from CRAN (close enough for reproducibility)
+
+
+---
+
+## Author
+
+**Glady Hazitha Samuel, PhD**  
+Post-Graduate Certificate in Genomic Data Analysis  
 University of Connecticut
+
+📧 glady.samuel@uconn.edu  
+🌐 [ghsamuel.netlify.app](https://ghsamuel.netlify.app)  
+💼 [LinkedIn](https://www.linkedin.com/in/glady-hazitha-samuel-phd)
+
 ---
 
-## References
+## Acknowledgments
 
-Khouri-Farah, N., Guo, Q., Perry, T.A., Dussault, R., Li, J.Y.H. (2025). FOXP genes regulate Purkinje cell diversity and cerebellar morphogenesis. *Nature Neuroscience*. https://doi.org/10.1038/s41593-025-02042-w
+- **Khouri-Farah et al.** for generating and sharing the dataset
+- **UConn HPC** (Mantis cluster) for computational resources
+- **Miura Laboratory** for research support
 
 ---
 
-## License
-
-Analysis code: MIT License  
-Data: GEO accession GSE256438 (published, public domain)
+*Last updated: May 2026*
