@@ -9,8 +9,8 @@ library(patchwork)
 setwd("/core/projects/GAP/GDA/gsamuel/scRNAseq")
 
 # Create output directories
-dir.create("results/01_qc", recursive = TRUE, showWarnings = FALSE)
-dir.create("figures/01_qc", recursive = TRUE, showWarnings = FALSE)
+dir.create("results/04_R_analysis/01_qc", recursive = TRUE, showWarnings = FALSE)
+dir.create("figures/04_R_analysis/01_qc", recursive = TRUE, showWarnings = FALSE)
 
 # ============================================================================
 # E16.5 REPLICATE 1
@@ -36,7 +36,7 @@ e16_rep1[["percent.mt"]] <- PercentageFeatureSet(e16_rep1, pattern = "^mt-")
 
 # QC plots BEFORE filtering
 p1 <- VlnPlot(e16_rep1, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-ggsave("figures/01_qc/violin_before_qc_e16_rep1.png", p1, width = 12, height = 4)
+ggsave("figures/04_R_analysis/01_qc/violin_before_qc_e16_rep1.png", p1, width = 12, height = 4)
 
 cat("  Cells before QC:", ncol(e16_rep1), "\n")
 
@@ -51,10 +51,10 @@ cat("  Cells after QC:", ncol(e16_rep1_filtered), "\n")
 
 # QC plots AFTER filtering
 p2 <- VlnPlot(e16_rep1_filtered, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-ggsave("figures/01_qc/violin_after_qc_e16_rep1.png", p2, width = 12, height = 4)
+ggsave("figures/04_R_analysis/01_qc/violin_after_qc_e16_rep1.png", p2, width = 12, height = 4)
 
 # Save
-saveRDS(e16_rep1_filtered, "results/01_qc/e16_rep1_filtered.rds")
+saveRDS(e16_rep1_filtered, "results/04_R_analysis/01_qc/e16_rep1_filtered.rds")
 
 # ============================================================================
 # E16.5 REPLICATE 2
@@ -75,7 +75,7 @@ e16_rep2[["percent.mt"]] <- PercentageFeatureSet(e16_rep2, pattern = "^mt-")
 
 # QC plots BEFORE filtering
 p3 <- VlnPlot(e16_rep2, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-ggsave("figures/01_qc/violin_before_qc_e16_rep2.png", p3, width = 12, height = 4)
+ggsave("figures/04_R_analysis/01_qc/violin_before_qc_e16_rep2.png", p3, width = 12, height = 4)
 
 cat("  Cells before QC:", ncol(e16_rep2), "\n")
 
@@ -89,9 +89,9 @@ cat("  Cells after QC:", ncol(e16_rep2_filtered), "\n")
 
 # QC plots AFTER filtering
 p4 <- VlnPlot(e16_rep2_filtered, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-ggsave("figures/01_qc/violin_after_qc_e16_rep2.png", p4, width = 12, height = 4)
+ggsave("figures/04_R_analysis/01_qc/violin_after_qc_e16_rep2.png", p4, width = 12, height = 4)
 
-saveRDS(e16_rep2_filtered, "results/01_qc/e16_rep2_filtered.rds")
+saveRDS(e16_rep2_filtered, "results/04_R_analysis/01_qc/e16_rep2_filtered.rds")
 
 # ============================================================================
 # E18.5
@@ -112,7 +112,7 @@ e18[["percent.mt"]] <- PercentageFeatureSet(e18, pattern = "^mt-")
 
 # QC plots BEFORE filtering
 p5 <- VlnPlot(e18, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-ggsave("figures/01_qc/violin_before_qc_e18.png", p5, width = 12, height = 4)
+ggsave("figures/04_R_analysis/01_qc/violin_before_qc_e18.png", p5, width = 12, height = 4)
 
 cat("  Cells before QC:", ncol(e18), "\n")
 
@@ -126,9 +126,9 @@ cat("  Cells after QC:", ncol(e18_filtered), "\n")
 
 # QC plots AFTER filtering
 p6 <- VlnPlot(e18_filtered, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
-ggsave("figures/01_qc/violin_after_qc_e18.png", p6, width = 12, height = 4)
+ggsave("figures/04_R_analysis/01_qc/violin_after_qc_e18.png", p6, width = 12, height = 4)
 
-saveRDS(e18_filtered, "results/01_qc/e18_filtered.rds")
+saveRDS(e18_filtered, "results/04_R_analysis/01_qc/e18_filtered.rds")
 
 # ============================================================================
 # SUMMARY
@@ -150,6 +150,6 @@ summary_df <- data.frame(
                                ncol(e18_filtered)/ncol(e18)) * 100, 1)
 )
 
-write.csv(summary_df, "results/01_qc/qc_summary.csv", row.names = FALSE)
+write.csv(summary_df, "results/04_R_analysis/01_qc/qc_summary.csv", row.names = FALSE)
 
-cat("\nQC complete! Files saved to results/01_qc/ and figures/01_qc/\n")
+cat("\nQC complete! Files saved to results/04_R_analysis/01_qc/ and figures/04_R_analysis/01_qc/\n")

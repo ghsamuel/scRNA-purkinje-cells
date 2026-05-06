@@ -34,7 +34,7 @@ merged <- RunUMAP(merged, dims = 1:30, verbose = FALSE)
 
 # Check batch effect
 p1 <- DimPlot(merged, group.by = "sample") + ggtitle("Pre-integration")
-ggsave("figures/02_integration/umap_pre_integration_by_sample.png", p1, width = 10, height = 8)
+ggsave("figures/04_R_analysis/02_integration/umap_pre_integration_by_sample.png", p1, width = 10, height = 8)
 
 # Harmony integration - corrects for sample-level batch effects
 integrated <- RunHarmony(merged, group.by.vars = "sample", 
@@ -50,15 +50,15 @@ p2 <- DimPlot(integrated, group.by = "sample") + ggtitle("Post-integration")
 p3 <- DimPlot(integrated, group.by = "stage") + ggtitle("By stage")
 p4 <- DimPlot(integrated, label = TRUE) + ggtitle("Clusters")
 
-ggsave("figures/02_integration/umap_post_integration_by_sample.png", p2, width = 10, height = 8)
-ggsave("figures/02_integration/umap_post_integration_by_stage.png", p3, width = 10, height = 8)
-ggsave("figures/02_integration/umap_post_integration_clusters.png", p4, width = 10, height = 8)
+ggsave("figures/04_R_analysis/02_integration/umap_post_integration_by_sample.png", p2, width = 10, height = 8)
+ggsave("figures/04_R_analysis/02_integration/umap_post_integration_by_stage.png", p3, width = 10, height = 8)
+ggsave("figures/04_R_analysis/02_integration/umap_post_integration_clusters.png", p4, width = 10, height = 8)
 
 # Check for sample-specific clusters
 cluster_dist <- table(integrated$seurat_clusters, integrated$sample)
-write.csv(cluster_dist, "results/02_integration/cluster_sample_distribution.csv")
+write.csv(cluster_dist, "results/04_R_analysis/02_integration/cluster_sample_distribution.csv")
 
-saveRDS(integrated, "results/02_integration/purkinje_integrated.rds")
+saveRDS(integrated, "results/04_R_analysis/02_integration/purkinje_integrated.rds")
 
 cat("Integration complete -", ncol(integrated), "cells,", 
     length(unique(integrated$seurat_clusters)), "clusters\n")
