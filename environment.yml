@@ -1,0 +1,22 @@
+name: purkinje-scrna
+channels:
+  - conda-forge
+  - bioconda
+  - r
+  - defaults
+
+dependencies:
+  - r-base=4.4.2
+  - r-essentials
+  - r-devtools
+  - r-remotes
+  - r-seurat
+  - r-dplyr=1.2.1
+  - r-ggplot2
+  - r-patchwork
+  - bioconductor-singlecellexperiment
+  
+  # Note: harmony and CellChat must be installed via R after env creation
+  # Run in R after activating environment:
+  # install.packages("harmony")
+  # remotes::install_github('sqjin/CellChat')
