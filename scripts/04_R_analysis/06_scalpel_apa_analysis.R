@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # SCALPEL APA analysis - 3'UTR length changes
-# Jini Samuel
+
 
 library(Seurat)
 library(scalpelR)
