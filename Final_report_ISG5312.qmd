@@ -649,16 +649,7 @@ This single-cell RNA-sequencing analysis of mouse cerebellar Purkinje cells at E
 
 # Conclusions
 
-This analysis provides a comprehensive molecular and cellular characterization of Purkinje cell development during late embryonic mouse cerebellar development. We identified 13 molecularly distinct PC subtypes and revealed a coordinated maturation program involving metabolic switching, synaptic preparation, ion channel regulation, and communication network refinement.
-
-Key biological insights:
-
-- PC subtypes are established early and persist through maturation
-- E16.5→E18.5 transition involves coordinated upregulation of oxidative metabolism, protein synthesis, and synaptic machinery
-- Intercellular communication decreases 26%, reflecting shift from developmental patterning to circuit assembly
-- Purkinje cells increase ephrinB and neurexin signaling (synapse organizers) while reducing neuregulin and NCAM (developmental cues)
-- SHH-driven proliferative signaling has not yet peaked at these embryonic stages
-- Regional variation in PC maturation highlights the importance of spatial context
+This analysis provides a comprehensive characterization of Purkinje cell development during late embryonic mouse cerebellar development. We identified 13 molecularly distinct PC subtypes and revealed a coordinated maturation program involving metabolic switching, synaptic preparation, ion channel regulation, and communication network refinement.
 
 
 ---

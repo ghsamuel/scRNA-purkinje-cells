@@ -3269,16 +3269,7 @@ vertical-align: -.125em;
 </section>
 <section id="conclusions" class="level1" data-number="12">
 <h1 data-number="12"><span class="header-section-number">12</span> Conclusions</h1>
-<p>This analysis provides a comprehensive molecular and cellular characterization of Purkinje cell development during late embryonic mouse cerebellar development. We identified 13 molecularly distinct PC subtypes and revealed a coordinated maturation program involving metabolic switching, synaptic preparation, ion channel regulation, and communication network refinement.</p>
-<p>Key biological insights:</p>
-<ul>
-<li>PC subtypes are established early and persist through maturation</li>
-<li>E16.5→E18.5 transition involves coordinated upregulation of oxidative metabolism, protein synthesis, and synaptic machinery</li>
-<li>Intercellular communication decreases 26%, reflecting shift from developmental patterning to circuit assembly</li>
-<li>Purkinje cells increase ephrinB and neurexin signaling (synapse organizers) while reducing neuregulin and NCAM (developmental cues)</li>
-<li>SHH-driven proliferative signaling has not yet peaked at these embryonic stages</li>
-<li>Regional variation in PC maturation highlights the importance of spatial context</li>
-</ul>
+<p>This analysis provides a comprehensive characterization of Purkinje cell development during late embryonic mouse cerebellar development. We identified 13 molecularly distinct PC subtypes and revealed a coordinated maturation program involving metabolic switching, synaptic preparation, ion channel regulation, and communication network refinement.</p>
 <hr>
 </section>
 <section id="methods-summary" class="level1" data-number="13">
@@ -4489,101 +4480,92 @@ loaded via a namespace (and not attached):
 <span id="cb10-649"><a href="#cb10-649" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-650"><a href="#cb10-650" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusions</span></span>
 <span id="cb10-651"><a href="#cb10-651" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-652"><a href="#cb10-652" aria-hidden="true" tabindex="-1"></a>This analysis provides a comprehensive molecular and cellular characterization of Purkinje cell development during late embryonic mouse cerebellar development. We identified 13 molecularly distinct PC subtypes and revealed a coordinated maturation program involving metabolic switching, synaptic preparation, ion channel regulation, and communication network refinement.</span>
+<span id="cb10-652"><a href="#cb10-652" aria-hidden="true" tabindex="-1"></a>This analysis provides a comprehensive characterization of Purkinje cell development during late embryonic mouse cerebellar development. We identified 13 molecularly distinct PC subtypes and revealed a coordinated maturation program involving metabolic switching, synaptic preparation, ion channel regulation, and communication network refinement.</span>
 <span id="cb10-653"><a href="#cb10-653" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-654"><a href="#cb10-654" aria-hidden="true" tabindex="-1"></a>Key biological insights:</span>
-<span id="cb10-655"><a href="#cb10-655" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-656"><a href="#cb10-656" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>PC subtypes are established early and persist through maturation</span>
-<span id="cb10-657"><a href="#cb10-657" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>E16.5→E18.5 transition involves coordinated upregulation of oxidative metabolism, protein synthesis, and synaptic machinery</span>
-<span id="cb10-658"><a href="#cb10-658" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Intercellular communication decreases 26%, reflecting shift from developmental patterning to circuit assembly</span>
-<span id="cb10-659"><a href="#cb10-659" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Purkinje cells increase ephrinB and neurexin signaling (synapse organizers) while reducing neuregulin and NCAM (developmental cues)</span>
-<span id="cb10-660"><a href="#cb10-660" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>SHH-driven proliferative signaling has not yet peaked at these embryonic stages</span>
-<span id="cb10-661"><a href="#cb10-661" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Regional variation in PC maturation highlights the importance of spatial context</span>
-<span id="cb10-662"><a href="#cb10-662" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-663"><a href="#cb10-663" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-664"><a href="#cb10-664" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb10-665"><a href="#cb10-665" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-666"><a href="#cb10-666" aria-hidden="true" tabindex="-1"></a><span class="fu"># Methods Summary</span></span>
-<span id="cb10-667"><a href="#cb10-667" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-668"><a href="#cb10-668" aria-hidden="true" tabindex="-1"></a><span class="fu">## Software and Versions</span></span>
-<span id="cb10-669"><a href="#cb10-669" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-670"><a href="#cb10-670" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**SRA Toolkit**: v3.0.1</span>
-<span id="cb10-671"><a href="#cb10-671" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cell Ranger**: v9.0.1</span>
-<span id="cb10-672"><a href="#cb10-672" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**R**: v4.4.0</span>
-<span id="cb10-673"><a href="#cb10-673" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Seurat**: v5.2.1</span>
-<span id="cb10-674"><a href="#cb10-674" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Harmony**: v1.2.0</span>
-<span id="cb10-675"><a href="#cb10-675" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**clusterProfiler**: v4.14.0</span>
-<span id="cb10-676"><a href="#cb10-676" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CellChat**: v2.1.2</span>
-<span id="cb10-677"><a href="#cb10-677" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-678"><a href="#cb10-678" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Parameters</span></span>
-<span id="cb10-679"><a href="#cb10-679" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-680"><a href="#cb10-680" aria-hidden="true" tabindex="-1"></a>**Quality Control**:</span>
+<span id="cb10-654"><a href="#cb10-654" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-655"><a href="#cb10-655" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb10-656"><a href="#cb10-656" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-657"><a href="#cb10-657" aria-hidden="true" tabindex="-1"></a><span class="fu"># Methods Summary</span></span>
+<span id="cb10-658"><a href="#cb10-658" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-659"><a href="#cb10-659" aria-hidden="true" tabindex="-1"></a><span class="fu">## Software and Versions</span></span>
+<span id="cb10-660"><a href="#cb10-660" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-661"><a href="#cb10-661" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**SRA Toolkit**: v3.0.1</span>
+<span id="cb10-662"><a href="#cb10-662" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cell Ranger**: v9.0.1</span>
+<span id="cb10-663"><a href="#cb10-663" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**R**: v4.4.0</span>
+<span id="cb10-664"><a href="#cb10-664" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Seurat**: v5.2.1</span>
+<span id="cb10-665"><a href="#cb10-665" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Harmony**: v1.2.0</span>
+<span id="cb10-666"><a href="#cb10-666" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**clusterProfiler**: v4.14.0</span>
+<span id="cb10-667"><a href="#cb10-667" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**CellChat**: v2.1.2</span>
+<span id="cb10-668"><a href="#cb10-668" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-669"><a href="#cb10-669" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key Parameters</span></span>
+<span id="cb10-670"><a href="#cb10-670" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-671"><a href="#cb10-671" aria-hidden="true" tabindex="-1"></a>**Quality Control**:</span>
+<span id="cb10-672"><a href="#cb10-672" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-673"><a href="#cb10-673" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>nFeature_RNA: 200-6,000</span>
+<span id="cb10-674"><a href="#cb10-674" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>nCount_RNA: &gt;200</span>
+<span id="cb10-675"><a href="#cb10-675" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>percent.mt: &lt;10%</span>
+<span id="cb10-676"><a href="#cb10-676" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-677"><a href="#cb10-677" aria-hidden="true" tabindex="-1"></a>**Integration**:</span>
+<span id="cb10-678"><a href="#cb10-678" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-679"><a href="#cb10-679" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Method: Harmony</span>
+<span id="cb10-680"><a href="#cb10-680" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Dimensions: 1-30</span>
 <span id="cb10-681"><a href="#cb10-681" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-682"><a href="#cb10-682" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>nFeature_RNA: 200-6,000</span>
-<span id="cb10-683"><a href="#cb10-683" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>nCount_RNA: &gt;200</span>
-<span id="cb10-684"><a href="#cb10-684" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>percent.mt: &lt;10%</span>
-<span id="cb10-685"><a href="#cb10-685" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-686"><a href="#cb10-686" aria-hidden="true" tabindex="-1"></a>**Integration**:</span>
-<span id="cb10-687"><a href="#cb10-687" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-688"><a href="#cb10-688" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Method: Harmony</span>
-<span id="cb10-689"><a href="#cb10-689" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Dimensions: 1-30</span>
-<span id="cb10-690"><a href="#cb10-690" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-691"><a href="#cb10-691" aria-hidden="true" tabindex="-1"></a>**Clustering**:</span>
+<span id="cb10-682"><a href="#cb10-682" aria-hidden="true" tabindex="-1"></a>**Clustering**:</span>
+<span id="cb10-683"><a href="#cb10-683" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-684"><a href="#cb10-684" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Algorithm: Louvain</span>
+<span id="cb10-685"><a href="#cb10-685" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Resolution: 0.5 (whole dataset), 1.2 (Purkinje subset)</span>
+<span id="cb10-686"><a href="#cb10-686" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-687"><a href="#cb10-687" aria-hidden="true" tabindex="-1"></a>**Differential Expression**:</span>
+<span id="cb10-688"><a href="#cb10-688" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-689"><a href="#cb10-689" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Test: Wilcoxon rank-sum</span>
+<span id="cb10-690"><a href="#cb10-690" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>logfc.threshold: 0.25</span>
+<span id="cb10-691"><a href="#cb10-691" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>min.pct: 0.10</span>
 <span id="cb10-692"><a href="#cb10-692" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-693"><a href="#cb10-693" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Algorithm: Louvain</span>
-<span id="cb10-694"><a href="#cb10-694" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Resolution: 0.5 (whole dataset), 1.2 (Purkinje subset)</span>
-<span id="cb10-695"><a href="#cb10-695" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-696"><a href="#cb10-696" aria-hidden="true" tabindex="-1"></a>**Differential Expression**:</span>
-<span id="cb10-697"><a href="#cb10-697" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-698"><a href="#cb10-698" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Test: Wilcoxon rank-sum</span>
-<span id="cb10-699"><a href="#cb10-699" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>logfc.threshold: 0.25</span>
-<span id="cb10-700"><a href="#cb10-700" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>min.pct: 0.10</span>
-<span id="cb10-701"><a href="#cb10-701" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-702"><a href="#cb10-702" aria-hidden="true" tabindex="-1"></a>**GO/GSEA**:</span>
-<span id="cb10-703"><a href="#cb10-703" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-704"><a href="#cb10-704" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Organism: org.Mm.eg.db</span>
-<span id="cb10-705"><a href="#cb10-705" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>P-adjustment: Benjamini-Hochberg</span>
-<span id="cb10-706"><a href="#cb10-706" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cutoff: padj &lt; 0.05</span>
-<span id="cb10-707"><a href="#cb10-707" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-708"><a href="#cb10-708" aria-hidden="true" tabindex="-1"></a>**CellChat**:</span>
-<span id="cb10-709"><a href="#cb10-709" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-710"><a href="#cb10-710" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Database: CellChatDB.mouse</span>
-<span id="cb10-711"><a href="#cb10-711" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Probability method: triMean</span>
-<span id="cb10-712"><a href="#cb10-712" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Min cells: 10 (E16.5), 5 (E18.5)</span>
-<span id="cb10-713"><a href="#cb10-713" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-714"><a href="#cb10-714" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb10-715"><a href="#cb10-715" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-716"><a href="#cb10-716" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Availability</span></span>
-<span id="cb10-717"><a href="#cb10-717" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-718"><a href="#cb10-718" aria-hidden="true" tabindex="-1"></a>**Raw data**: GEO accession <span class="co">[</span><span class="ot">GSE256438</span><span class="co">](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)</span></span>
-<span id="cb10-719"><a href="#cb10-719" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-720"><a href="#cb10-720" aria-hidden="true" tabindex="-1"></a>**Processed data**: Available upon request</span>
-<span id="cb10-721"><a href="#cb10-721" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-722"><a href="#cb10-722" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb10-723"><a href="#cb10-723" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-724"><a href="#cb10-724" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
-<span id="cb10-725"><a href="#cb10-725" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-726"><a href="#cb10-726" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Khouri-Farah N, et al. (2025) FOXP genes regulate Purkinje cell diversity and cerebellar morphogenesis. *Nature Neuroscience*.</span>
-<span id="cb10-727"><a href="#cb10-727" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-728"><a href="#cb10-728" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Hao Y, et al. (2024) Dictionary learning for integrative, multimodal and scalable single-cell analysis. *Nature Biotechnology*.</span>
-<span id="cb10-729"><a href="#cb10-729" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-730"><a href="#cb10-730" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Korsunsky I, et al. (2019) Fast, sensitive and accurate integration of single-cell data with Harmony. *Nature Methods*.</span>
-<span id="cb10-731"><a href="#cb10-731" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-732"><a href="#cb10-732" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Yu G. (2024) Thirteen years of clusterProfiler. *The Innovation*.</span>
-<span id="cb10-733"><a href="#cb10-733" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-734"><a href="#cb10-734" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Jin S, et al. (2021) Inference and analysis of cell-cell communication using CellChat. *Nature Communications* 12, 1088.</span>
-<span id="cb10-735"><a href="#cb10-735" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-736"><a href="#cb10-736" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Wechsler-Reya RJ, Scott MP. (1999) Control of neuronal precursor proliferation in the cerebellum by Sonic Hedgehog. *Neuron* 22(1):103-14.</span>
-<span id="cb10-737"><a href="#cb10-737" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-738"><a href="#cb10-738" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Dahmane N, Ruiz i Altaba A. (1999) Sonic hedgehog regulates the growth and patterning of the cerebellum. *Development* 126(14):3089-100.</span>
-<span id="cb10-739"><a href="#cb10-739" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-740"><a href="#cb10-740" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb10-741"><a href="#cb10-741" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-742"><a href="#cb10-742" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session Info</span></span>
-<span id="cb10-743"><a href="#cb10-743" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-744"><a href="#cb10-744" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session-info, eval=TRUE, echo=FALSE}</span></span>
-<span id="cb10-745"><a href="#cb10-745" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
-<span id="cb10-746"><a href="#cb10-746" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
+<span id="cb10-693"><a href="#cb10-693" aria-hidden="true" tabindex="-1"></a>**GO/GSEA**:</span>
+<span id="cb10-694"><a href="#cb10-694" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-695"><a href="#cb10-695" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Organism: org.Mm.eg.db</span>
+<span id="cb10-696"><a href="#cb10-696" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>P-adjustment: Benjamini-Hochberg</span>
+<span id="cb10-697"><a href="#cb10-697" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Cutoff: padj &lt; 0.05</span>
+<span id="cb10-698"><a href="#cb10-698" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-699"><a href="#cb10-699" aria-hidden="true" tabindex="-1"></a>**CellChat**:</span>
+<span id="cb10-700"><a href="#cb10-700" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-701"><a href="#cb10-701" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Database: CellChatDB.mouse</span>
+<span id="cb10-702"><a href="#cb10-702" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Probability method: triMean</span>
+<span id="cb10-703"><a href="#cb10-703" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Min cells: 10 (E16.5), 5 (E18.5)</span>
+<span id="cb10-704"><a href="#cb10-704" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-705"><a href="#cb10-705" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb10-706"><a href="#cb10-706" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-707"><a href="#cb10-707" aria-hidden="true" tabindex="-1"></a><span class="fu"># Data Availability</span></span>
+<span id="cb10-708"><a href="#cb10-708" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-709"><a href="#cb10-709" aria-hidden="true" tabindex="-1"></a>**Raw data**: GEO accession <span class="co">[</span><span class="ot">GSE256438</span><span class="co">](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)</span></span>
+<span id="cb10-710"><a href="#cb10-710" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-711"><a href="#cb10-711" aria-hidden="true" tabindex="-1"></a>**Processed data**: Available upon request</span>
+<span id="cb10-712"><a href="#cb10-712" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-713"><a href="#cb10-713" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb10-714"><a href="#cb10-714" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-715"><a href="#cb10-715" aria-hidden="true" tabindex="-1"></a><span class="fu"># References</span></span>
+<span id="cb10-716"><a href="#cb10-716" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-717"><a href="#cb10-717" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Khouri-Farah N, et al. (2025) FOXP genes regulate Purkinje cell diversity and cerebellar morphogenesis. *Nature Neuroscience*.</span>
+<span id="cb10-718"><a href="#cb10-718" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-719"><a href="#cb10-719" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Hao Y, et al. (2024) Dictionary learning for integrative, multimodal and scalable single-cell analysis. *Nature Biotechnology*.</span>
+<span id="cb10-720"><a href="#cb10-720" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-721"><a href="#cb10-721" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Korsunsky I, et al. (2019) Fast, sensitive and accurate integration of single-cell data with Harmony. *Nature Methods*.</span>
+<span id="cb10-722"><a href="#cb10-722" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-723"><a href="#cb10-723" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Yu G. (2024) Thirteen years of clusterProfiler. *The Innovation*.</span>
+<span id="cb10-724"><a href="#cb10-724" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-725"><a href="#cb10-725" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Jin S, et al. (2021) Inference and analysis of cell-cell communication using CellChat. *Nature Communications* 12, 1088.</span>
+<span id="cb10-726"><a href="#cb10-726" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-727"><a href="#cb10-727" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Wechsler-Reya RJ, Scott MP. (1999) Control of neuronal precursor proliferation in the cerebellum by Sonic Hedgehog. *Neuron* 22(1):103-14.</span>
+<span id="cb10-728"><a href="#cb10-728" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-729"><a href="#cb10-729" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>Dahmane N, Ruiz i Altaba A. (1999) Sonic hedgehog regulates the growth and patterning of the cerebellum. *Development* 126(14):3089-100.</span>
+<span id="cb10-730"><a href="#cb10-730" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-731"><a href="#cb10-731" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb10-732"><a href="#cb10-732" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-733"><a href="#cb10-733" aria-hidden="true" tabindex="-1"></a><span class="fu"># Session Info</span></span>
+<span id="cb10-734"><a href="#cb10-734" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-735"><a href="#cb10-735" aria-hidden="true" tabindex="-1"></a><span class="in">```{r session-info, eval=TRUE, echo=FALSE}</span></span>
+<span id="cb10-736"><a href="#cb10-736" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span>
+<span id="cb10-737"><a href="#cb10-737" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
