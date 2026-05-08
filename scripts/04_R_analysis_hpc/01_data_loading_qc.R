@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Load Cell Ranger outputs and apply QC filtering
-# Jini Samuel
+
 
 library(Seurat)
 library(ggplot2)
