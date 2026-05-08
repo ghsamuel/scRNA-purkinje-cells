@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 # Merge samples and integrate with Harmony
 # Fixes batch effect between E16.5 replicates
-# Jini Samuel
 
 library(Seurat)
 library(harmony)
@@ -10,13 +9,13 @@ library(ggplot2)
 setwd("/core/projects/GAP/GDA/gsamuel/scRNAseq")
 
 # Create output directories
-dir.create("results/02_integration", recursive = TRUE, showWarnings = FALSE)
-dir.create("figures/02_integration", recursive = TRUE, showWarnings = FALSE)
+dir.create("results/04_R_analysis/02_integration", recursive = TRUE, showWarnings = FALSE)
+dir.create("figures/04_R_analysis/02_integration", recursive = TRUE, showWarnings = FALSE)
 
 # Load filtered objects
-e16_rep1 <- readRDS("results/01_qc/e16_rep1_filtered.rds")
-e16_rep2 <- readRDS("results/01_qc/e16_rep2_filtered.rds")
-e18 <- readRDS("results/01_qc/e18_filtered.rds")
+e16_rep1 <- readRDS("results/04_R_analysis/01_qc/e16_rep1_filtered.rds")
+e16_rep2 <- readRDS("results/04_R_analysis/01_qc/e16_rep2_filtered.rds")
+e18 <- readRDS("results/04_R_analysis/01_qc/e18_filtered.rds")
 
 # Merge
 merged <- merge(e16_rep1, y = c(e16_rep2, e18),
@@ -37,13 +36,13 @@ p1 <- DimPlot(merged, group.by = "sample") + ggtitle("Pre-integration")
 ggsave("figures/04_R_analysis/02_integration/umap_pre_integration_by_sample.png", p1, width = 10, height = 8)
 
 # Harmony integration - corrects for sample-level batch effects
-integrated <- RunHarmony(merged, group.by.vars = "sample", 
-                         reduction = "pca", dims = 1:30, verbose = FALSE)
+integrated <- RunHarmony(object=merged, group.by.vars = "sample", 
+                         reduction.use = "pca", dims.use=1:30, reduction.save="harmony")
 
 # Re-cluster on integrated embeddings
-integrated <- FindNeighbors(integrated, reduction = "harmony", dims = 1:30)
+integrated <- FindNeighbors(integrated, reduction = "harmony", dims=1:30)
 integrated <- FindClusters(integrated, resolution = 0.5, verbose = FALSE)
-integrated <- RunUMAP(integrated, reduction = "harmony", dims = 1:30, verbose = FALSE)
+integrated <- RunUMAP(integrated, reduction = "harmony",dims=1:30,  verbose = FALSE)
 
 # Check integration quality
 p2 <- DimPlot(integrated, group.by = "sample") + ggtitle("Post-integration")
