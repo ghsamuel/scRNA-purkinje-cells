@@ -5,12 +5,15 @@
 [![DOI](https://img.shields.io/badge/DOI-10.1038%2Fs41593--025--02042--w-blue)](https://doi.org/10.1038/s41593-025-02042-w)
 [![GEO](https://img.shields.io/badge/GEO-GSE256438-orange)](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)](Dockerfile)
+[![Report](https://img.shields.io/badge/Report-View_HTML-success)](https://ghsamuel.github.io/scRNA-purkinje-cells/Final_report_ISG5312.html)
 
 ---
 
 ## Overview
 
 This repository contains a reproducible analysis pipeline for characterizing Purkinje cell diversity during mouse cerebellar development using single-cell RNA sequencing. The analysis integrates quality control, batch correction, cell type annotation, high-resolution subtyping, cell-cell communication inference, and alternative polyadenylation quantification.
+
+**📊 [View Full Analysis Report](https://ghsamuel.github.io/scRNA-purkinje-cells/Final_report_ISG5312.html)**
 
 **Dataset:** Khouri-Farah et al., *Nature Neuroscience* (2025)  
 **Technology:** 10X Genomics Chromium single-cell 3' RNA-seq  
@@ -66,7 +69,7 @@ scRNA-purkinje-cells/
 │   └── sample_mapping.csv    # SRR to stage mapping
 ├── Dockerfile                # Reproducible R environment
 ├── environment.yml           # Conda environment specification
-├── purkinje_analysis_report.html  # Complete tutorial-style report
+├── Final_report_ISG5312.html # Complete analysis report
 └── README.md
 ```
 
@@ -202,7 +205,8 @@ Filtered Seurat objects from Script 01 output will be available on Zenodo:
 | **Communication** | 15% reduction E16.5 → E18.5 |
 | **APA** | 130 genes with significant 3'UTR changes |
 
-**Full results and figures:** See `https://ghsamuel.github.io/scRNA-purkinje-cells/Final_report_ISG5312.html`
+**📊 [View Full Results and Figures](https://ghsamuel.github.io/scRNA-purkinje-cells/Final_report_ISG5312.html)**
+
 ---
 
 ## Troubleshooting
@@ -217,7 +221,6 @@ Filtered Seurat objects from Script 01 output will be available on Zenodo:
 **Problem:** Layers not joined  
 **Solution:** Run `obj <- JoinLayers(obj)` before `FindAllMarkers()`
 
-
-
+---
 
 *Last updated: May 2026*
