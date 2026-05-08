@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 # Document software versions for reproducibility
-# Jini Samuel
 
 library(Seurat)
 library(harmony)
