@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # Annotate cell types using marker genes
-# Jini Samuel
+
 
 library(Seurat)
 library(dplyr)
