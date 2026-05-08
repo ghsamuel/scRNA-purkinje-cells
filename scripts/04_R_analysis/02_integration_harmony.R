@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Merge samples and integrate with Harmony
 # Fixes batch effect between E16.5 replicates
-# Jini Samuel
+
 
 library(Seurat)
 library(harmony)
