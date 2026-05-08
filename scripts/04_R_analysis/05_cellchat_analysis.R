@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # CellChat - compare communication between E16.5 and E18.5
-# Jini Samuel
+
 
 library(Seurat)
 library(CellChat)
