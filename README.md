@@ -214,8 +214,6 @@ Filtered Seurat objects from Script 01 output will be available on Zenodo:
 
 ## Troubleshooting
 
-### Common Issues
-
 **1. Missing Technical Reads**  
 **Problem:** `fasterq-dump` discards barcodes/UMIs by default  
 **Solution:** Use `--include-technical` flag
