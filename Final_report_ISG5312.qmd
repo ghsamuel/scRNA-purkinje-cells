@@ -633,7 +633,6 @@ This single-cell RNA-sequencing analysis of mouse cerebellar Purkinje cells at E
 
 - Limits statistical power for stage comparisons
 - Cannot perform pseudobulk DESeq2 (requires ≥2 replicates/condition)
-- Reduces confidence in stage-specific observations
 
 **Mitigation**: Focused analysis on mature PC only; used conservative statistical thresholds; CellChat analysis uses all cells within each stage (E16.5: 13,101 cells, E18.5: 6,622 cells), providing statistical power despite single replicate
 
@@ -641,9 +640,7 @@ This single-cell RNA-sequencing analysis of mouse cerebellar Purkinje cells at E
 
 **Unexpected observation**: E18.5 shows reduced Purkinje proportion and enrichment for immature PCs
 
-**Interpretation**: Likely reflects regional sampling differences—the paper notes "anterior cerebellum develops more slowly"
-
-**Implication**: Stage comparisons should be interpreted cautiously
+**Interpretation**: Could reflect regional sampling differences—the paper notes "anterior cerebellum develops more slowly"
 
 ---
 
