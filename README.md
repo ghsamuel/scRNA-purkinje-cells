@@ -202,7 +202,7 @@ Filtered Seurat objects from Script 01 output will be available on Zenodo:
 | **Communication** | 15% reduction E16.5 → E18.5 |
 | **APA** | 130 genes with significant 3'UTR changes |
 
-**Full results and figures:** See `purkinje_analysis_report.html`
+**Full results and figures:** See `https://ghsamuel.github.io/scRNA-purkinje-cells/Final_report_ISG5312.html`
 ---
 
 ## Troubleshooting
