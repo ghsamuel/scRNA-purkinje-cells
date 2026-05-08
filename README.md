@@ -10,7 +10,7 @@
 
 ## Overview
 
-This repository contains a complete, reproducible analysis pipeline for characterizing Purkinje cell diversity during mouse cerebellar development using single-cell RNA sequencing. The analysis integrates quality control, batch correction, cell type annotation, high-resolution subtyping, cell-cell communication inference, and alternative polyadenylation quantification.
+This repository contains a reproducible analysis pipeline for characterizing Purkinje cell diversity during mouse cerebellar development using single-cell RNA sequencing. The analysis integrates quality control, batch correction, cell type annotation, high-resolution subtyping, cell-cell communication inference, and alternative polyadenylation quantification.
 
 **Dataset:** Khouri-Farah et al., *Nature Neuroscience* (2025)  
 **Technology:** 10X Genomics Chromium single-cell 3' RNA-seq  
@@ -27,7 +27,6 @@ How do Purkinje cells diversify during embryonic cerebellar development, and wha
 - Identified 15 Purkinje cell subtypes with distinct Foxp1/Foxp2/Foxp4 expression patterns
 - Detected 15% reduction in cell-cell communication from E16.5 to E18.5
 - Quantified 130 genes with significant 3'UTR length changes during development
-- Successfully validated batch correction approach for technical replicates
 
 ---
 
@@ -121,7 +120,7 @@ scRNA-purkinje-cells/
 
 ## Quick Start
 
-### Option 1: Docker (Recommended)
+### Option 1: Docker (Under Construction)
 
 **Prerequisites:** Docker installed
 
@@ -159,8 +158,6 @@ Rscript scripts/04_R_analysis/02_integration_harmony.R
 # ... etc
 ```
 
-
-
 ---
 
 ## Software Requirements
@@ -187,13 +184,10 @@ See `environment.yml` for complete list with exact versions.
 
 ### Raw Data
 - **FASTQ files:** [SRA PRJNA1079673](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA1079673)
-- **Processed counts:** [GEO GSE256438](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)
 
 ### Processed RDS Files (for Docker)
-Filtered Seurat objects from Script 01 output are available on Zenodo:  
+Filtered Seurat objects from Script 01 output will be available on Zenodo:  
 🔗 **[DOI: 10.5281/zenodo.XXXXXXX]** *(to be added)*
-
-These allow users to start from Script 02 (integration) without running Cell Ranger.
 
 ---
 
@@ -209,7 +203,6 @@ These allow users to start from Script 02 (integration) without running Cell Ran
 | **APA** | 130 genes with significant 3'UTR changes |
 
 **Full results and figures:** See `purkinje_analysis_report.html`
-
 ---
 
 ## Troubleshooting
@@ -224,31 +217,7 @@ These allow users to start from Script 02 (integration) without running Cell Ran
 **Problem:** Layers not joined  
 **Solution:** Run `obj <- JoinLayers(obj)` before `FindAllMarkers()`
 
-**3. Docker Build Fails (Seurat version)**  
-**Problem:** Seurat 5.4.0 not on CRAN yet  
-**Solution:** Dockerfile uses latest stable from CRAN (close enough for reproducibility)
 
 
----
-
-## Author
-
-**Glady Hazitha Samuel, PhD**  
-Post-Graduate Certificate in Genomic Data Analysis  
-University of Connecticut
-
-📧 glady.samuel@uconn.edu  
-🌐 [ghsamuel.netlify.app](https://ghsamuel.netlify.app)  
-💼 [LinkedIn](https://www.linkedin.com/in/glady-hazitha-samuel-phd)
-
----
-
-## Acknowledgments
-
-- **Khouri-Farah et al.** for generating and sharing the dataset
-- **UConn HPC** (Mantis cluster) for computational resources
-- **Miura Laboratory** for research support
-
----
 
 *Last updated: May 2026*
