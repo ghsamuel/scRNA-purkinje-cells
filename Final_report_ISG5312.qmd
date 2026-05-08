@@ -721,9 +721,8 @@ This analysis provides a comprehensive characterization of Purkinje cell develop
 
 5. Jin S, et al. (2021) Inference and analysis of cell-cell communication using CellChat. *Nature Communications* 12, 1088.
 
-6. Wechsler-Reya RJ, Scott MP. (1999) Control of neuronal precursor proliferation in the cerebellum by Sonic Hedgehog. *Neuron* 22(1):103-14.
+6. Millen, K. J. (2025) Essential new insights into human cerebellar Purkinje cell biology from studies of essential tremor. Proc. Natl. Acad. Sci. U.S.A. 122, e2514663122.
 
-7. Dahmane N, Ruiz i Altaba A. (1999) Sonic hedgehog regulates the growth and patterning of the cerebellum. *Development* 126(14):3089-100.
 
 Generative AI tools were used for code review and troubleshooting assistance during development of the analysis pipeline.
 
