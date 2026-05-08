@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Load and QC filter Purkinje scRNA-seq data
 # Data: GSE256438 - E16.5 (2 reps) and E18.5 cerebellum
-# Jini Samuel
+
 
 library(Seurat)
 library(dplyr)
