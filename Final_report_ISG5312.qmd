@@ -725,6 +725,8 @@ This analysis provides a comprehensive characterization of Purkinje cell develop
 
 7. Dahmane N, Ruiz i Altaba A. (1999) Sonic hedgehog regulates the growth and patterning of the cerebellum. *Development* 126(14):3089-100.
 
+Generative AI tools were used for code review and troubleshooting assistance during development of the analysis pipeline.
+
 ---
 
 # Session Info
