@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # High-resolution Purkinje cell subtyping
 # Looking for Foxp1/Foxp2/Foxp4 expression patterns
-# Jini Samuel
+
 
 library(Seurat)
 library(dplyr)
