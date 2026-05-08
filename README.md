@@ -13,7 +13,10 @@
 
 This repository contains a reproducible analysis pipeline for characterizing Purkinje cell diversity during mouse cerebellar development using single-cell RNA sequencing. The analysis integrates quality control, batch correction, cell type annotation, high-resolution subtyping, cell-cell communication inference, and alternative polyadenylation quantification.
 
-**📊 [View Full Analysis Report](https://ghsamuel.github.io/scRNA-purkinje-cells/Final_report_ISG5312.html)**
+## Reports
+
+- **[View Full Analysis Report](https://ghsamuel.github.io/scRNA-purkinje-cells/Final_report_ISG5312.html)** - Full scRNA-seq analysis with QC, integration, cell type annotation, CellChat, and APA
+- **[QC Checkpoint Report](https://ghsamuel.github.io/scRNA-purkinje-cells/reports/02_qc/QC_report.html)** - FASTQ quality control with FastQC/MultiQC
 
 **Dataset:** Khouri-Farah et al., *Nature Neuroscience* (2025)  
 **Technology:** 10X Genomics Chromium single-cell 3' RNA-seq  
