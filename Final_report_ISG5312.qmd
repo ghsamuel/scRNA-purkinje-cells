@@ -1,0 +1,746 @@
+---
+title: "Single-Cell RNA-seq Analysis of Purkinje Cell Development"
+subtitle: "Mouse Cerebellum E16.5 - E18.5"
+author: "Glady Hazitha Samuel"
+date: today
+format:
+  html:
+    theme: journal
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    toc-expand: 2
+    code-fold: true
+    code-tools: true
+    embed-resources: true
+    number-sections: true
+    page-layout: article
+    fig-width: 10
+    fig-height: 8
+execute:
+  eval: false
+  echo: true
+  warning: false
+  message: false
+---
+
+# Introduction
+
+## Dataset Overview
+
+This analysis examines Purkinje cell diversity during late embryonic cerebellar development using single-cell RNA-sequencing data from mouse cerebellum at two developmental stages:
+
+- **E16.5**: 2 biological replicates  
+- **E18.5**: 1 biological replicate
+
+**Data source**: GEO accession [GSE256438](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)  
+**BioProject**: PRJNA1079673  
+**Publication**: Khouri-Farah et al. (2025) *Nature Neuroscience* - "FOXP genes regulate Purkinje cell diversity and cerebellar morphogenesis"
+
+**Biological context**: Purkinje cells (PCs) are GABAergic neurons born between E10.5-E13.5 in mice. By E16.5-E18.5, PCs are undergoing maturation characterized by dendritic arborization, synapse formation, and migration to form the Purkinje cell layer.
+
+**Analysis goals**:
+
+1. Characterize cellular composition of E16.5 and E18.5 cerebellum
+2. Identify and classify Purkinje cell subtypes  
+3. Compare PC subtype composition between developmental stages
+4. Identify genes and pathways differentially expressed during PC maturation
+5. Analyze cell-cell communication networks during cerebellar development
+
+---
+
+# Methods
+
+## Dataset Acquisition
+
+### Sample Information
+
+| Sample ID | SRA Accession | Stage | Replicate | Description |
+|-----------|---------------|-------|-----------|-------------|
+| E16_rep1  | SRR28065511   | E16.5 | 1         | Embryonic day 16.5, replicate 1 |
+| E16_rep2  | SRR28065512   | E16.5 | 2         | Embryonic day 16.5, replicate 2 |
+| E18       | SRR28065510   | E18.5 | 1         | Embryonic day 18.5 |
+
+### Cell Ranger Alignment Results
+
+| Metric | E18.5 (SRR28065510) | E16_rep1 (SRR28065511) | E16_rep2 (SRR28065512) |
+|--------|---------------------|------------------------|------------------------|
+| **Chemistry** | 3' v2 | 3' v3 | 3' v2 |
+| **Estimated cells** | 7,234 | 10,247 | 6,953 |
+| **Mean reads/cell** | 52,315 | 40,531 | 41,166 |
+| **Median genes/cell** | 2,953 | 4,357 | 2,917 |
+| **Median UMI/cell** | 7,350 | 13,585 | 7,424 |
+| **Reads mapped to genome** | 91.2% | 89.4% | 90.3% |
+| **Reads mapped to transcriptome** | 80.3% | 74.8% | 79.4% |
+
+**Quality assessment**: All samples showed high mapping rates (>89% to genome, >74% to transcriptome). E16_rep1 used 3' v3 chemistry, resulting in higher gene/UMI capture compared to v2 chemistry.
+
+---
+
+# Quality Control and Filtering
+
+## Rationale
+
+Quality control filtering removes low-quality cells (empty droplets, debris, dying cells) while retaining biological variation to ensure downstream analysis reflects true biological signal.
+
+## Data Loading
+
+Raw gene expression counts from Cell Ranger were loaded into R using the Seurat package. For each sample, we created a Seurat object containing the gene-by-cell count matrix. Stage labels were added to distinguish E16.5 from E18.5 samples. Mitochondrial gene percentage was calculated for each cell to assess cell viability (dying cells show elevated mitochondrial content). The three samples were then merged into a single Seurat object with unique cell identifiers to prevent barcode collisions between samples.
+
+```{r load-data}
+library(Seurat)
+library(dplyr)
+library(ggplot2)
+
+# Load Cell Ranger outputs
+e16_rep1 <- Read10X("results/03_counts/01_cellranger/SRR28065511/outs/filtered_feature_bc_matrix/")
+e16_rep2 <- Read10X("results/03_counts/01_cellranger/SRR28065512/outs/filtered_feature_bc_matrix/")
+e18 <- Read10X("results/03_counts/01_cellranger/SRR28065510/outs/filtered_feature_bc_matrix/")
+
+# Create Seurat objects
+e16_rep1_obj <- CreateSeuratObject(counts = e16_rep1, project = "E16_rep1")
+e16_rep2_obj <- CreateSeuratObject(counts = e16_rep2, project = "E16_rep2")
+e18_obj <- CreateSeuratObject(counts = e18, project = "E18")
+
+# Add metadata
+e16_rep1_obj$stage <- "E16.5"
+e16_rep2_obj$stage <- "E16.5"
+e18_obj$stage <- "E18.5"
+
+# Calculate mitochondrial percentage
+e16_rep1_obj[["percent.mt"]] <- PercentageFeatureSet(e16_rep1_obj, pattern = "^mt-")
+e16_rep2_obj[["percent.mt"]] <- PercentageFeatureSet(e16_rep2_obj, pattern = "^mt-")
+e18_obj[["percent.mt"]] <- PercentageFeatureSet(e18_obj, pattern = "^mt-")
+
+# Merge objects
+obj <- merge(e16_rep1_obj, y = c(e16_rep2_obj, e18_obj), 
+             add.cell.ids = c("E16_rep1", "E16_rep2", "E18"))
+```
+
+## QC Metrics Visualization
+
+### Before Filtering
+
+**Plot description**: Violin plots showing the distribution of three key quality control metrics across all cells before filtering:
+
+- **nFeature_RNA**: Number of genes detected per cell (indicates cell complexity)
+- **nCount_RNA**: Total UMI counts per cell (indicates sequencing depth)
+- **percent.mt**: Percentage of mitochondrial gene expression (indicates cell viability)
+
+::: {layout-ncol=3}
+![E16.5 Rep1 - Before QC](results/04_R_analysis/01_qc/01_qc/figures/violin_before_qc_e16_rep1.png)
+
+![E16.5 Rep2 - Before QC](results/04_R_analysis/01_qc/01_qc/figures/violin_before_qc_e16_rep2.png)
+
+![E18.5 - Before QC](results/04_R_analysis/01_qc/01_qc/figures/violin_before_qc_e18.png)
+:::
+
+**Observations**: 
+
+- E16_rep1 shows higher gene/UMI counts (3' v3 chemistry)
+- All samples show low-quality cells (high mt%, low gene counts)
+- Outliers with >6,000 genes likely represent doublets
+
+### After Filtering
+
+**Plot description**: Same metrics after applying QC thresholds. Filtered cells show uniform distributions within expected biological ranges.
+
+::: {layout-ncol=3}
+![E16.5 Rep1 - After QC](results/04_R_analysis/01_qc/01_qc/figures/violin_after_qc_e16_rep1.png)
+
+![E16.5 Rep2 - After QC](results/04_R_analysis/01_qc/01_qc/figures/violin_after_qc_e16_rep2.png)
+
+![E18.5 - After QC](results/04_R_analysis/01_qc/01_qc/figures/violin_after_qc_e18.png)
+:::
+
+**Results**: Clean distributions with reduced technical noise and improved data quality.
+
+## QC Thresholds
+
+**Filtering criteria applied**:
+
+- **nFeature_RNA**: 200 - 6,000 genes per cell (removes empty droplets and doublets)
+- **nCount_RNA**: > 200 UMI (ensures sufficient sequencing depth)
+- **percent.mt**: < 10% (removes dead/dying cells)
+
+```{r qc-filtering}
+# Apply QC filters
+obj <- subset(obj, 
+              subset = nFeature_RNA > 200 & 
+                       nFeature_RNA < 6000 & 
+                       nCount_RNA > 200 & 
+                       percent.mt < 10)
+```
+
+**Post-QC cell counts**:
+
+- E16_rep1: 6,409 cells (62.5% retention)
+- E16_rep2: 6,692 cells (96.2% retention)
+- E18: 6,622 cells (91.5% retention)
+- **Total**: 19,723 high-quality cells
+
+E16_rep1 had lower retention possibly due to 3' v3 chemistry producing higher gene counts, with some cells exceeding the 6,000 gene threshold.
+
+---
+
+# Data Integration
+
+## Rationale
+
+With samples from different sequencing runs and chemistries (v2 vs v3), technical batch effects could hide biological signal. Integration removes technical variation while preserving biological differences between developmental stages and cell types.
+
+## Integration Method: Harmony
+
+```{r integration}
+library(harmony)
+
+# Standard Seurat workflow
+obj <- NormalizeData(obj)
+obj <- FindVariableFeatures(obj, selection.method = "vst", nfeatures = 2000)
+obj <- ScaleData(obj)
+obj <- RunPCA(obj, npcs = 30, verbose = FALSE)
+
+# Run Harmony integration
+obj <- RunHarmony(obj, 
+                  group.by.vars = "orig.ident",
+                  dims.use = 1:30,
+                  verbose = FALSE)
+
+# UMAP on integrated data
+obj <- RunUMAP(obj, reduction = "harmony", dims = 1:30, verbose = FALSE)
+```
+
+**Advantages of Harmony**:
+
+- Computationally efficient
+- Maintains stage-specific differences while removing technical variation
+
+## Integration Results
+
+### Pre-Integration
+
+**Plot description**: UMAP visualization before integration, colored by sample. Pre-integration data shows clear separation by sample ID, indicating technical batch effects that could confound biological interpretation.
+
+![UMAP before integration, colored by sample](results/04_R_analysis/02_integration/figures/umap_pre_integration_by_sample.png)
+
+### Post-Integration
+
+**Plot description**: UMAP after Harmony integration. Cells are colored by sample (left) and developmental stage (right). Post-integration, biological replicates mix well while preserving cell type structure and stage-specific biology.
+
+::: {layout-ncol=2}
+![UMAP after integration - by sample](results/04_R_analysis/02_integration/figures/umap_by_sample.png)
+
+![UMAP after integration - by stage](results/04_R_analysis/02_integration/figures/umap_by_stage.png)
+:::
+
+**Observation**: Post-integration, E16.5 biological replicates mix well, confirming successful batch correction. Cell type structure is preserved across samples despite chemistry differences.
+
+---
+
+# Clustering and Cell Type Annotation
+
+## Clustering
+
+```{r clustering}
+# Clustering on Harmony embeddings
+obj <- FindNeighbors(obj, reduction = "harmony", dims = 1:30)
+obj <- FindClusters(obj, resolution = 0.5, verbose = FALSE)
+```
+
+**Resolution selection**: Tested 0.3, 0.5, 0.8. Resolution 0.5 provided optimal balance—higher resolutions over-split known cell types while lower resolutions merged distinct populations.
+
+**Number of clusters identified**: 25 - This is similar to what was published. They found 24 clusters. 
+
+## Marker Gene Identification
+
+FindAllMarkers identified cluster-specific marker genes by comparing each cluster to all other cells. Only upregulated genes (≥25% expression, log2FC ≥ 0.25) were retained for cell type annotation.
+
+```{r find-markers}
+# Find markers for all clusters
+markers <- FindAllMarkers(obj, 
+                          only.pos = TRUE,
+                          min.pct = 0.25,
+                          logfc.threshold = 0.25,
+                          verbose = FALSE)
+```
+
+## Cell Type Annotation
+
+**Plot description**: UMAP visualization with cells colored by annotated cell type. Each point represents a single cell, positioned based on gene expression similarity (closer = more similar). Annotations are based on canonical marker gene expression for known cerebellar cell types.
+
+Clusters were annotated based on expression of known cerebellar cell type markers:
+
+![UMAP with annotated cell types](results/04_R_analysis/04_annotate_clusters/figures/umap_annotated_celltypes.png)
+
+**Major cell types identified**:
+
+| Cell Type | Clusters | Key Markers | Cell Count |
+|-----------|----------|-------------|------------|
+| PC (mature) | 9 | Pcp2, Calb1, Car8 | 924 |
+| PC.immature | 11 | Foxp2+, Pcp2- | 859 |
+| Granule cells (GC) | 0, 2, 14 | Gabra6, Pax6 | 2,368 |
+| Granule precursors (GCP) | 1, 3 | Atoh1, Neurod1 | 3,221 |
+| Bergmann glia (BG) | 6 | Aqp4, Slc1a3 | 2,962 |
+| Interneurons (IN) | 4, 7 | Pax2, Gad1 | 2,893 |
+| GABAergic neurons | Multiple | Gad1, Gad2 | 1,600 |
+| Other cell types | Various | - | ~5,900 |
+
+**Purkinje cell validation**: Both PC clusters express Foxp2 (pan-PC marker). Cluster 9 (mature): 98.2% Foxp2+, mean Pcp2 = 1.13. Cluster 11 (immature): 93.6% Foxp2+, mean Pcp2 = 0.25.
+
+---
+
+# Purkinje Cell Subtyping
+
+## Rationale
+
+Following Khouri-Farah et al. (2025), we performed high-resolution clustering on Purkinje cells to identify molecularly distinct PC subtypes. The paper identified 11 subtypes at E16.5-E18.5 using Foxp2 as a pan-PC marker.
+
+## Methods
+
+```{r pc-subsetting}
+# Subset Purkinje cells
+pc_cells <- subset(obj, cell_type %in% c("PC", "PC.immature"))
+
+# Re-cluster at higher resolution
+pc_cells <- FindNeighbors(pc_cells, reduction = "harmony", dims = 1:30)
+pc_cells <- FindClusters(pc_cells, resolution = 1.2)
+```
+
+## Subtype Identification
+
+![Purkinje cell subtypes UMAP](results/04_R_analysis/05_purkinje_subtypes/figures/purkinje_subtypes_umap.png)
+
+**Result**: Identified 13 PC subtypes (vs 11 in published study)
+
+
+## Subtype Marker Analysis
+
+![Top markers for each PC subtype](results/04_R_analysis/05_purkinje_subtypes/figures/subtype_markers_dotplot.png)
+
+**Representative markers identified**:
+
+- Subtype-specific cadherin expression (Cdh8, Cdh9, Cdh10)
+- Cell adhesion molecules (Cntn4, Cntn6, Pcdh10)
+- Ion channels and receptors
+
+---
+
+# Differential Expression Analysis
+
+## Rationale
+
+To identify genes and pathways associated with Purkinje cell maturation, we compared mature PCs between E16.5 and E18.5.
+
+**Subset analyzed**: Mature PC only (excluded PC.immature to focus on maturation-associated changes)
+
+## Methods
+
+```{r de-analysis}
+# Subset to mature PC
+mature_pc <- subset(obj, cell_type == "PC")
+
+# Differential expression: E18.5 vs E16.5
+Idents(mature_pc) <- "stage"
+de_genes <- FindMarkers(mature_pc, 
+                        ident.1 = "E18.5",
+                        ident.2 = "E16.5",
+                        min.pct = 0.10,
+                        logfc.threshold = 0.25,
+                        test.use = "wilcox")
+```
+
+## Volcano Plot
+
+**Plot description**: Volcano plot showing differential gene expression between E18.5 and E16.5 in mature Purkinje cells. X-axis shows log2 fold change (right = upregulated at E18.5, left = downregulated). Y-axis shows statistical significance (-log10 adjusted p-value). Each point represents one gene. Red points indicate significantly differentially expressed genes (padj < 0.05, |log2FC| > 0.25).
+
+![Volcano plot of DE genes](results/04_R_analysis/07_DE_mature_PC/volcano_plot.png)
+
+## Results Summary
+
+**Total significant genes**: 231 (padj < 0.05, |log2FC| > 0.25)
+
+- **Upregulated at E18.5**: 182 genes
+- **Downregulated at E18.5**: 49 genes
+
+**Top upregulated genes** (E18.5 > E16.5):
+
+- Oxidative phosphorylation: Cox6a2, Cox7a1, Uqcrh, Atp5g1
+- Ribosomal proteins: Rpl13, Rps15, Rpl36, Rps27
+- Synaptic: Gria3, Grin2c, Kcnj10
+
+**Top downregulated genes** (E18.5 < E16.5):
+
+- Developmental: Mdk, Nrp1, Sema3e
+- Cell adhesion: Nrcam, Cdh2
+
+---
+
+# GO and Pathway Enrichment Analysis
+
+## Gene Ontology Analysis
+
+### Biological Process
+
+![GO Biological Process enrichment](results/04_R_analysis/08_GO_GSEA/figures/GO_BP_dotplot.png)
+
+**Top enriched processes**:
+
+1. Oxidative phosphorylation & ATP synthesis
+2. Mitochondrial electron transport
+3. Cytoplasmic translation (ribosome-mediated)
+4. Synaptic transmission & organization
+
+
+### Cellular Component
+
+![GO Cellular Component enrichment](results/04_R_analysis/08_GO_GSEA/figures/GO_CC_dotplot.png)
+
+**Key subcellular localizations**:
+
+1. Synaptic compartments: Postsynapse, dendritic tree
+2. Ribosomes: Cytosolic ribosomes 
+3. Mitochondria: Respiratory chain complexes
+4. Neuronal structure: Cell body, dendrites
+
+### Molecular Function
+
+![GO Molecular Function enrichment](results/04_R_analysis/08_GO_GSEA/figures/GO_MF_dotplot.png)
+
+**Key molecular activities**:
+
+1. Structural constituent of ribosome
+2. Channel/transporter regulator activity
+3. Protein complex binding
+4. Calmodulin binding
+
+## KEGG Pathway Analysis
+
+![KEGG pathway enrichment](results/04_R_analysis/08_GO_GSEA/figures/KEGG_dotplot.png)
+
+**Top pathways**:
+
+1. Oxidative phosphorylation
+2. Ribosome
+3. Synaptic vesicle cycle
+4. Neurodegeneration pathways (Alzheimer's, Parkinson's, Huntington's)
+
+
+## GSEA Results
+
+
+![GSEA GO BP bubble plot](results/04_R_analysis/08_GO_GSEA/figures/GSEA_GO_BP_bubble.png)
+
+
+---
+
+# Cell-Cell Communication Analysis
+
+## Rationale
+
+Cerebellar development from E16.5 to E18.5 represents a critical transition period characterized by active neuronal maturation, gliogenesis, and circuit assembly. To understand how intercellular signaling networks evolve during this developmental window, we performed systematic cell-cell communication analysis using CellChat.
+
+**Biological context**: At E16.5-E18.5, Purkinje cells are forming the Purkinje cell layer and beginning dendritic development. During this period, they communicate with neighboring cells including Bergmann glia and granule cell precursors to coordinate proper cerebellar development.
+
+## Methods
+
+```{r cellchat-setup}
+library(CellChat)
+
+# Create CellChat objects for each stage
+e16_data <- GetAssayData(subset(obj, stage == "E16.5"), layer = "data")
+e18_data <- GetAssayData(subset(obj, stage == "E18.5"), layer = "data")
+
+cellchat_e16 <- createCellChat(object = e16_data, 
+                               meta = subset(obj, stage == "E16.5")@meta.data,
+                               group.by = "cell_type")
+
+cellchat_e18 <- createCellChat(object = e18_data,
+                               meta = subset(obj, stage == "E18.5")@meta.data, 
+                               group.by = "cell_type")
+
+# Load ligand-receptor database
+cellchat_e16@DB <- CellChatDB.mouse
+cellchat_e18@DB <- CellChatDB.mouse
+
+# Preprocessing and inference
+cellchat_e16 <- subsetData(cellchat_e16)
+cellchat_e16 <- identifyOverExpressedGenes(cellchat_e16)
+cellchat_e16 <- identifyOverExpressedInteractions(cellchat_e16)
+cellchat_e16 <- computeCommunProb(cellchat_e16, type = "triMean")
+cellchat_e16 <- filterCommunication(cellchat_e16, min.cells = 10)
+cellchat_e16 <- computeCommunProbPathway(cellchat_e16)
+cellchat_e16 <- aggregateNet(cellchat_e16)
+cellchat_e16 <- netAnalysis_computeCentrality(cellchat_e16)
+
+# Same for E18.5
+cellchat_e18 <- subsetData(cellchat_e18)
+cellchat_e18 <- identifyOverExpressedGenes(cellchat_e18)
+cellchat_e18 <- identifyOverExpressedInteractions(cellchat_e18)
+cellchat_e18 <- computeCommunProb(cellchat_e18, type = "triMean")
+cellchat_e18 <- filterCommunication(cellchat_e18, min.cells = 5)
+cellchat_e18 <- computeCommunProbPathway(cellchat_e18)
+cellchat_e18 <- aggregateNet(cellchat_e18)
+cellchat_e18 <- netAnalysis_computeCentrality(cellchat_e18)
+```
+
+**Key parameters**:
+
+- **Database**: CellChatDB.mouse (curated ligand-receptor interactions)
+- **Probability calculation**: triMean
+- **Filtering**: min.cells = 10 (E16.5), min.cells = 5 (E18.5, accounting for fewer cells)
+- **Cell types analyzed**: All 19 cerebellar cell types
+- **Focus**: 7 key neural cell types (PC, PC.immature, BG, GC, GCP, GABA.diff, IN)
+
+## Overall Communication Dynamics
+
+### Stage Comparison
+
+**Plot description**: Bar plots comparing total intercellular communication between E16.5 and E18.5. Left panel shows the number of significant cell-cell interactions detected. Right panel shows the total interaction strength (sum of communication probabilities). Both metrics show substantial decrease from E16.5 to E18.5.
+
+![Overall communication comparison](results/04_R_analysis/10_cellchat_analysis/figures/overall/stage_comparison.png)
+
+**Key finding**: Communication decreased by **25.9%** from E16.5 to E18.5
+
+- E16.5: 6,642 interactions, strength 233.5
+- E18.5: 4,925 interactions, strength 181.1
+
+
+**Biological interpretation**: The  decrease in cell-cell communication suggests developmental maturation and cellular specialization. At E16.5, cells seem to be actively establishing their identities and require extensive intercellular signaling. By E18.5, cells more committed to their fates and communication becoming more refined and selective
+
+### Communication Hubs
+
+**Plot description**: Heatmaps showing the number of interactions between all cerebellar cell types. The central heatmap shows cell-cell interaction counts (darker = more interactions). Marginal bar plots show the total incoming signals (top bars, how much each cell type receives) and outgoing signals (right bars, how much each cell type sends). These identify major signaling "hubs" in the network.
+
+::: {layout-ncol=2}
+![E16.5 signaling hubs](results/04_R_analysis/10_cellchat_analysis/figures/overall/heatmap_hubs_e16.png)
+
+![E18.5 signaling hubs](results/04_R_analysis/10_cellchat_analysis/figures/overall/heatmap_hubs_e18.png)
+:::
+
+
+**E18.5 changes**:
+
+- Overall reduction in bar heights (consistent with 26% decrease)
+- GCP signaling reduced (proliferative phase waning)
+- Maintained communication: Bergmann glia ↔ Purkinje cells
+
+### Network Visualization
+
+**Plot description**: Chord diagrams showing the communication network structure for 7 key neural cell types. Each arc represents a cell type (color-coded). Curved bands connecting arcs represent directional signaling from sender to receiver. Band thickness indicates interaction strength (thicker = more communication). In our plots, both stages show similar network topology, reflecting that the same cell-cell communication pathways are active at both stages
+
+::: {layout-ncol=2}
+![E16.5 communication network](results/04_R_analysis/10_cellchat_analysis/figures/overall/chord_e16.png)
+
+![E18.5 communication network](results/04_R_analysis/10_cellchat_analysis/figures/overall/chord_e18.png)
+:::
+
+
+**Plot description**: Bar plot showing the top 10 cell types that send signals TO Purkinje cells (PC + PC.immature combined). Bars are grouped by developmental stage (E16.5 in orange, E18.5 in blue) to enable direct comparison. Y-axis shows the total number of incoming interactions from each source cell type.
+
+![Incoming signals to Purkinje cells](results/04_R_analysis/10_cellchat_analysis/figures/purkinje/incoming_signals.png)
+
+**Top sources of signals TO Purkinje** (E16.5 → E18.5 change):
+
+1. **PC → PC** (71 → 77, +6): Purkinje self-signaling **INCREASED**
+2. **GC → PC** (63 → 48, -15, -24%): Granule cells reduced
+3. **GCP → PC** (55 → 39, -16, -29%): Granule precursors **largest decrease**
+4. **GABA.diff → PC** (54 → 44, -10): GABAergic neurons reduced
+5. **IN → PC** (50 → 40, -10): Interneurons reduced
+
+
+### Outgoing Signals from Purkinje Cells
+
+**Plot description**: Bar plot showing the top 10 cell types that RECEIVE signals FROM Purkinje cells. Same layout as incoming signals plot—grouped bars allow stage comparison. Y-axis shows total outgoing interactions to each target cell type.
+
+![Outgoing signals from Purkinje cells](results/04_R_analysis/10_cellchat_analysis/figures/purkinje/outgoing_signals.png)
+
+**Top targets of signals FROM Purkinje** (E16.5 → E18.5 change):
+
+1. **PC → PC** (71 → 74, +3): Self-signaling maintained
+2. **PC → GABA.diff** (56 → 34, -22, -39%): **Largest decrease** to GABAergic neurons
+3. **PC → IN** (57 → 41, -16, -28%): Interneurons reduced
+4. **PC → GC** (57 → 45, -12, -21%): Granule cells reduced
+5. **PC → BG** (41 → 32, -9): Bergmann glia reduced
+
+
+
+### Pathway Bubble Plots
+
+**Plot description**: Bubble plots showing specific ligand-receptor pairs for the top 10 pathways identified above. Each row is a ligand-receptor pair (e.g., "Nrg1 - Erbb4"). Columns represent specific cell-cell interactions (e.g., "PC → BG (E16.5)" vs "PC → BG (E18.5)"). Bubble size indicates communication probability (larger = stronger signal). Bubble color shows probability magnitude (blue = low, red = high). Statistical significance indicated by dot size (larger dots = more significant).
+
+These plots allow identification of which specific molecular interactions drive the pathway-level changes observed above.
+
+::: {layout-ncol=2}
+![Pathways FROM Purkinje to partners](results/04_R_analysis/10_cellchat_analysis/figures/purkinje/pathways_from_purkinje_bubble.png)
+
+![Pathways TO Purkinje from partners](results/04_R_analysis/10_cellchat_analysis/figures/purkinje/pathways_to_purkinje_bubble.png)
+:::
+
+**Notable ligand-receptor pairs**:
+
+**FROM Purkinje**:
+
+- **Nrg1-Erbb4**: Purkinje → Bergmann glia (supports glial differentiation)
+- **Nrxn1/2/3 - Nlgn1/2/3**: Purkinje → multiple targets (synaptic organization)
+- **Efnb1/2/3 - Ephb1/2**: Purkinje → GC, IN (dendritic spine formation)
+
+**TO Purkinje**:
+
+- **Ncam1-Ncam1**: Homophilic adhesion from multiple sources
+- **Efna2/3/4/5 - Epha3/4/5/7**: EphrinA signaling from GC, GCP, IN (axon guidance)
+- **Cntn1/2 - Nrcam/L1cam**: Contactin-based adhesion (neurite outgrowth)
+
+
+---
+
+# Comparison to Published Results
+
+## Similarities with Khouri-Farah et al. (2025)
+
+- **Number of subtypes**: We identified 13 PC subtypes vs 11 in the paper (difference likely due to resolution parameter and clustering algorithm)
+- **Foxp2 as pan-PC marker**: Confirmed across all subtypes
+- **Cadherin expression**: Both studies identify cell adhesion molecules as key subtype markers
+- **"Subtle and gradual" maturation**: Paper states differentiation is subtle at E16.5-E18.5, our findings support this
+
+## Key Differences
+
+- **Maturation state**: We separated mature vs immature PCs, revealing maturation-specific gene expression programs
+- **Sample composition**: Our E18.5 sample shows unexpected immature PC enrichment, likely reflecting regional sampling variation
+- **Communication dynamics**: The CellChat analysis is not explored in the original paper, revealing the intercellular signaling landscape during this developmental window
+
+---
+
+# Discussion
+
+## Summary of Findings
+
+This single-cell RNA-sequencing analysis of mouse cerebellar Purkinje cells at E16.5 and E18.5 revealed:
+
+1. **13 molecularly distinct PC subtypes** with stable composition across developmental stages
+2. **Compositional differences**: Subtypes 7, 8, 10 are predominantly E16.5-specific
+3. **231 genes differentially expressed** during E16.5→E18.5 maturation
+4. **Coordinated maturation program** involving metabolic switching, synaptic preparation, and ion channel regulation
+5. **26% decrease in intercellular communication**, reflecting shift from developmental signaling to circuit refinement
+6. **Pathway transitions**: Decreased developmental cues (neuregulin, NCAM), increased synaptogenic signals (ephrinB, neurexin)
+
+## Technical Considerations
+
+### Sample Size Limitations
+
+**Replicates**: E18.5 has only **1 biological replicate** vs 2 for E16.5
+
+**Impact**:
+
+- Limits statistical power for stage comparisons
+- Cannot perform pseudobulk DESeq2 (requires ≥2 replicates/condition)
+- Reduces confidence in stage-specific observations
+
+**Mitigation**: Focused analysis on mature PC only; used conservative statistical thresholds; CellChat analysis uses all cells within each stage (E16.5: 13,101 cells, E18.5: 6,622 cells), providing statistical power despite single replicate
+
+### Sampling Variation
+
+**Unexpected observation**: E18.5 shows reduced Purkinje proportion and enrichment for immature PCs
+
+**Interpretation**: Likely reflects regional sampling differences—the paper notes "anterior cerebellum develops more slowly"
+
+**Implication**: Stage comparisons should be interpreted cautiously
+
+---
+
+# Conclusions
+
+This analysis provides a comprehensive molecular and cellular characterization of Purkinje cell development during late embryonic mouse cerebellar development. We identified 13 molecularly distinct PC subtypes and revealed a coordinated maturation program involving metabolic switching, synaptic preparation, ion channel regulation, and communication network refinement.
+
+Key biological insights:
+
+- PC subtypes are established early and persist through maturation
+- E16.5→E18.5 transition involves coordinated upregulation of oxidative metabolism, protein synthesis, and synaptic machinery
+- Intercellular communication decreases 26%, reflecting shift from developmental patterning to circuit assembly
+- Purkinje cells increase ephrinB and neurexin signaling (synapse organizers) while reducing neuregulin and NCAM (developmental cues)
+- SHH-driven proliferative signaling has not yet peaked at these embryonic stages
+- Regional variation in PC maturation highlights the importance of spatial context
+
+
+---
+
+# Methods Summary
+
+## Software and Versions
+
+- **SRA Toolkit**: v3.0.1
+- **Cell Ranger**: v9.0.1
+- **R**: v4.4.0
+- **Seurat**: v5.2.1
+- **Harmony**: v1.2.0
+- **clusterProfiler**: v4.14.0
+- **CellChat**: v2.1.2
+
+## Key Parameters
+
+**Quality Control**:
+
+- nFeature_RNA: 200-6,000
+- nCount_RNA: >200
+- percent.mt: <10%
+
+**Integration**:
+
+- Method: Harmony
+- Dimensions: 1-30
+
+**Clustering**:
+
+- Algorithm: Louvain
+- Resolution: 0.5 (whole dataset), 1.2 (Purkinje subset)
+
+**Differential Expression**:
+
+- Test: Wilcoxon rank-sum
+- logfc.threshold: 0.25
+- min.pct: 0.10
+
+**GO/GSEA**:
+
+- Organism: org.Mm.eg.db
+- P-adjustment: Benjamini-Hochberg
+- Cutoff: padj < 0.05
+
+**CellChat**:
+
+- Database: CellChatDB.mouse
+- Probability method: triMean
+- Min cells: 10 (E16.5), 5 (E18.5)
+
+---
+
+# Data Availability
+
+**Raw data**: GEO accession [GSE256438](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE256438)
+
+**Processed data**: Available upon request
+
+---
+
+# References
+
+1. Khouri-Farah N, et al. (2025) FOXP genes regulate Purkinje cell diversity and cerebellar morphogenesis. *Nature Neuroscience*.
+
+2. Hao Y, et al. (2024) Dictionary learning for integrative, multimodal and scalable single-cell analysis. *Nature Biotechnology*.
+
+3. Korsunsky I, et al. (2019) Fast, sensitive and accurate integration of single-cell data with Harmony. *Nature Methods*.
+
+4. Yu G. (2024) Thirteen years of clusterProfiler. *The Innovation*.
+
+5. Jin S, et al. (2021) Inference and analysis of cell-cell communication using CellChat. *Nature Communications* 12, 1088.
+
+6. Wechsler-Reya RJ, Scott MP. (1999) Control of neuronal precursor proliferation in the cerebellum by Sonic Hedgehog. *Neuron* 22(1):103-14.
+
+7. Dahmane N, Ruiz i Altaba A. (1999) Sonic hedgehog regulates the growth and patterning of the cerebellum. *Development* 126(14):3089-100.
+
+---
+
+# Session Info
+
+```{r session-info, eval=TRUE, echo=FALSE}
+sessionInfo()
+```
